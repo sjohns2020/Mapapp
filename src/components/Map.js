@@ -4,28 +4,43 @@ import { useMap } from 'react-leaflet/hooks'
 import { Popup } from 'react-leaflet'
 import { Marker } from 'react-leaflet'
 import './Map.css';
+import { useEffect, useState } from 'react'
 
 const Map = () => {
+
+    const [mountains, setMountains] = useState([]);
     
-    const position = [55.94, -3.20]
-    const position2 = [55.86, -4.25]
-    const listofPosition = [position, position2]
-    const markerNodes = listofPosition.map((position) => (
-            <Marker position={position}>
+    useEffect(() => {
+        getMountains();
+    }, [])
+ 
+    const getMountains = () => {
+
+        fetch("https://munroapi.herokuapp.com/munros")
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            setMountains(data);
+        })
+    }
+
+    const mountainPins = mountains.map((position) => (
+            <Marker position={[position.latlng_lat,position.latlng_lng]}>
             <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+            {position.name} <br /> {position.height}m<br /> {position.meaning}
             </Popup>
             </Marker>
     ))
     
     return ( 
 
-        <MapContainer id="map" center={position} zoom={13} scrollWheelZoom={false}>
+        <MapContainer id="map" center={[56,-5]} zoom={8} scrollWheelZoom={true}>
         <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {markerNodes}
+        {mountainPins}
         </MapContainer>
      );
 }

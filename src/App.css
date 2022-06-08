@@ -1,14 +1,4 @@
-#App {
-  display: flex;
-  align-items: center;
-  margin: 40px;
-  padding: 40px;
-
-}
-
-#mainMap {
-  display: flex;
-  align-items: center;
-  margin: 40px;
-  padding: 40px;
+.leaflet-container {
+  height: 100vw;
+  width: 100vw;
 }
