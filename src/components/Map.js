@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 const Map = () => {
 
     const [mountains, setMountains] = useState([]);
+    const [selectedMountain, setSelectedMountain] = useState([]);
     
     useEffect(() => {
         getMountains();
@@ -25,14 +26,35 @@ const Map = () => {
         })
     }
 
+    
+    function HandleClick (position) {
+        console.log('clicked',position);
+        const map = useMap()
+        console.log('map center:', map.getCenter())
+        return null
+        // map.setView([position.latlng_lat,position.latlng_lng])
+        
+    }
+
+
+
+
     const mountainPins = mountains.map((position) => (
-            <Marker position={[position.latlng_lat,position.latlng_lng]}>
+            <Marker 
+            position={[position.latlng_lat,position.latlng_lng]}
+               eventHandlers={{
+                click: () => {
+                    HandleClick(position)
+                },
+              }}
+               >
             <Popup>
             {position.name} <br /> {position.height}m<br /> {position.meaning}
             </Popup>
             </Marker>
     ))
-    
+
+
     return ( 
 
         <MapContainer id="map" center={[56,-5]} zoom={8} scrollWheelZoom={true}>
